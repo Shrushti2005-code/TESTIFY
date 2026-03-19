@@ -1,9 +1,11 @@
-const CACHE_NAME = "testify-v1";
+const CACHE_NAME = "testify-v2";
 
 const ASSETS = [
-  "/",
-  "/index.html",
-  "/manifest.json"
+  "/TESTIFY/",
+  "/TESTIFY/index.html",
+  "/TESTIFY/manifest.json",
+  "/TESTIFY/icon-192.png",
+  "/TESTIFY/icon-512.png"
 ];
 
 // Install — cache essential files
@@ -16,7 +18,7 @@ self.addEventListener("install", (event) => {
   self.skipWaiting();
 });
 
-// Activate — clean up old caches
+// Activate — clean old caches
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -30,13 +32,10 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// Fetch — serve from cache if offline, else fetch from network
+// Fetch — serve from cache
 self.addEventListener("fetch", (event) => {
-  // Skip non-GET and Firebase/API requests — always fetch those live
   if (
     event.request.method !== "GET" ||
-    event.request.url.includes("firestore.googleapis.com") ||
-    event.request.url.includes("identitytoolkit") ||
     event.request.url.includes("googleapis.com")
   ) {
     return;
@@ -44,7 +43,9 @@ self.addEventListener("fetch", (event) => {
 
   event.respondWith(
     caches.match(event.request).then((cached) => {
-      return cached || fetch(event.request).catch(() => caches.match("/index.html"));
+      return cached || fetch(event.request).catch(() =>
+        caches.match("/TESTIFY/index.html")
+      );
     })
   );
 });
