@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --green:        #0E402D;
+  --green-light:  #1a6b4a;
+  --green-muted:  #F0F7F4;
+  --black:        #0a0a0a;
+  --white:        #ffffff;
+  --surface:      #f9f9f9;
+  --border:       #e5e7eb;
+  --text-muted:   #6b7280;
+  --shadow-card:  0 20px 60px rgba(0, 0, 0, 0.18);
+  --radius-pill:  30px;
+  --radius-card:  32px;
+  --radius-input: 14px;
+  --font:         'Poppins', sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--surface);
+  color: var(--black);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Shared page animations ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Button hover (applied globally via class if needed) ── */
+.home-btn:hover {
+  background: #0E402D !important;
+  color: #fff !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
