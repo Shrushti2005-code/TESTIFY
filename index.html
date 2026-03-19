@@ -1,14 +1,41 @@
-<script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("/TESTIFY/sw.js")
-        .then((reg) =>
-          console.log("✅ Service Worker registered:", reg.scope)
-        )
-        .catch((err) =>
-          console.log("❌ SW registration failed:", err)
-        );
-    });
-  }
-</script>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Testify — Smart Testing Platform</title>
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/TESTIFY/manifest.json" />
+    <meta name="theme-color" content="#1E3A8A" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Testify" />
+    <link rel="apple-touch-icon" href="/TESTIFY/icon-192.png" />
+    <link rel="icon" type="image/png" href="/TESTIFY/icon-192.png" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- THIS IS THE CRITICAL LINE — loads your React app -->
+    <script type="module" src="/src/main.jsx"></script>
+
+    <!-- Service Worker -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/TESTIFY/sw.js")
+            .then((reg) => console.log("✅ SW registered:", reg.scope))
+            .catch((err) => console.log("❌ SW failed:", err));
+        });
+      }
+    </script>
+  </body>
+</html>
