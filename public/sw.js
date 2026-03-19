@@ -1,4 +1,4 @@
-const CACHE_NAME = "testify-v2";
+const CACHE_NAME = "testify-v3";
 
 const ASSETS = [
   "/TESTIFY/",
