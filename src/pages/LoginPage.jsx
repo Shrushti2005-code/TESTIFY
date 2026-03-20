@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, signInWithRedirect, getRedirectResult } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db, googleProvider } from "../firebase";
+
+const isMobileDevice = () => /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
 
 export default function LoginPage() {
   const navigate        = useNavigate();
@@ -17,24 +19,63 @@ export default function LoginPage() {
     return () => window.removeEventListener("resize", handler);
   }, []);
 
+  // Handle redirect result when user comes back after Google redirect
+  useEffect(() => {
+    async function checkRedirect() {
+      try {
+        const result = await getRedirectResult(auth);
+        if (!result) return;
+        const uid  = result.user.uid;
+        // Read saved role from localStorage (set before redirect)
+        const savedRoleBeforeRedirect = localStorage.getItem("pendingRole") || "student";
+        const snap = await getDoc(doc(db, "users", uid));
+        if (!snap.exists()) {
+          await setDoc(doc(db, "users", uid), { email: result.user.email.toLowerCase(), role: savedRoleBeforeRedirect, createdAt: serverTimestamp() });
+          localStorage.setItem("uid", uid);
+          localStorage.setItem("email", result.user.email);
+          localStorage.setItem("role", savedRoleBeforeRedirect);
+          navigate(`/${savedRoleBeforeRedirect}`);
+        } else {
+          const savedRole = snap.data().role;
+          localStorage.setItem("uid", uid);
+          localStorage.setItem("email", result.user.email);
+          localStorage.setItem("role", savedRole);
+          navigate(`/${savedRole}`);
+        }
+      } catch (err) {
+        console.error(err);
+        setError("Sign-in failed. Please try again.");
+      }
+    }
+    checkRedirect();
+  }, []); // eslint-disable-line
+
   async function handleGoogle() {
     setError(""); setLoading(true);
     try {
-      const cred = await signInWithPopup(auth, googleProvider);
-      const uid  = cred.user.uid;
-      const snap = await getDoc(doc(db, "users", uid));
-      if (!snap.exists()) {
-        await setDoc(doc(db, "users", uid), { email: cred.user.email.toLowerCase(), role, createdAt: serverTimestamp() });
-        localStorage.setItem("uid", uid); localStorage.setItem("email", cred.user.email); localStorage.setItem("role", role);
-        navigate(`/${role}`);
+      if (isMobileDevice()) {
+        // Save role before redirect (page will reload)
+        localStorage.setItem("pendingRole", role);
+        await signInWithRedirect(auth, googleProvider);
+        // Page redirects — code below won't run
       } else {
-        const savedRole = snap.data().role;
-        localStorage.setItem("uid", uid); localStorage.setItem("email", cred.user.email); localStorage.setItem("role", savedRole);
-        navigate(`/${savedRole}`);
+        const cred = await signInWithPopup(auth, googleProvider);
+        const uid  = cred.user.uid;
+        const snap = await getDoc(doc(db, "users", uid));
+        if (!snap.exists()) {
+          await setDoc(doc(db, "users", uid), { email: cred.user.email.toLowerCase(), role, createdAt: serverTimestamp() });
+          localStorage.setItem("uid", uid); localStorage.setItem("email", cred.user.email); localStorage.setItem("role", role);
+          navigate(`/${role}`);
+        } else {
+          const savedRole = snap.data().role;
+          localStorage.setItem("uid", uid); localStorage.setItem("email", cred.user.email); localStorage.setItem("role", savedRole);
+          navigate(`/${savedRole}`);
+        }
       }
     } catch (err) {
       if (err.code !== "auth/popup-closed-by-user") setError("Sign-in failed. Please try again.");
-    } finally { setLoading(false); }
+      setLoading(false);
+    }
   }
 
   return (
