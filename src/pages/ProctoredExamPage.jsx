@@ -72,12 +72,60 @@ export default function ProctoredExamPage() {
   const progress      = qEntries.length > 0 ? (answeredCount / qEntries.length) * 100 : 0;
 
   if (submitted) return (
-    <div style={{ minHeight: "100vh", background: "#F1F5F9", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Poppins',sans-serif", padding: 16 }}>
-      <div style={{ background: "#fff", borderRadius: 24, padding: "48px 32px", textAlign: "center", border: "1px solid #E2E8F0", maxWidth: 420, width: "100%" }}>
-        <div style={{ fontSize: 56, marginBottom: 20 }}>🎉</div>
-        <h2 style={{ color: "#1E3A8A", fontSize: 24, fontWeight: 700, margin: "0 0 12px", fontFamily: "'Georgia',serif" }}>Exam Submitted!</h2>
-        <p style={{ color: "#64748B", fontSize: 14, lineHeight: 1.7, margin: "0 0 32px" }}>Your answers have been recorded.<br />Your admin will evaluate and publish results soon.</p>
-        <button onClick={() => navigate("/student")} style={{ background: "#1E3A8A", border: "none", borderRadius: 12, color: "#fff", fontSize: 14, fontWeight: 600, padding: "13px 32px", cursor: "pointer" }}>← Back to Dashboard</button>
+    <div style={{
+      minHeight: "100vh",
+      background: "#F1F5F9",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontFamily: "'Poppins',sans-serif",
+      padding: isMobile ? "16px" : "32px",
+      boxSizing: "border-box",
+    }}>
+      <div style={{
+        background: "#fff",
+        borderRadius: isMobile ? 16 : 24,
+        padding: isMobile ? "32px 20px" : "48px 40px",
+        textAlign: "center",
+        border: "1px solid #E2E8F0",
+        boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
+        maxWidth: 420,
+        width: "100%",
+        boxSizing: "border-box",
+      }}>
+        <div style={{ fontSize: isMobile ? 48 : 56, marginBottom: 16 }}>🎉</div>
+        <h2 style={{
+          color: "#1E3A8A",
+          fontSize: isMobile ? 20 : 24,
+          fontWeight: 700,
+          margin: "0 0 12px",
+          fontFamily: "'Georgia',serif",
+        }}>Exam Submitted!</h2>
+        <p style={{
+          color: "#64748B",
+          fontSize: isMobile ? 13 : 14,
+          lineHeight: 1.7,
+          margin: "0 0 28px",
+        }}>
+          Your answers have been recorded.<br />
+          Your admin will evaluate and publish results soon.
+        </p>
+        <button
+          onClick={() => navigate("/student")}
+          style={{
+            background: "#1E3A8A",
+            border: "none",
+            borderRadius: 12,
+            color: "#fff",
+            fontSize: isMobile ? 13 : 14,
+            fontWeight: 600,
+            padding: isMobile ? "12px 24px" : "13px 32px",
+            cursor: "pointer",
+            width: isMobile ? "100%" : "auto",
+          }}
+        >
+          ← Back to Dashboard
+        </button>
       </div>
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     </div>
