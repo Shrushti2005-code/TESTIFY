@@ -1,42 +1,37 @@
-const CACHE_NAME = "testify-v4";
+const CACHE_NAME = "testify-v5";
 
 const ASSETS = [
-  "/TESTIFY/",
-  "/TESTIFY/index.html",
-  "/TESTIFY/manifest.json",
-  "/TESTIFY/icon-192.png",
-  "/TESTIFY/icon-512.png"
+  "/",
+  "/index.html",
+  "/manifest.json",
+  "/icon-192.png",
+  "/icon-512.png"
 ];
 
-// Install — cache essential files
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
-    })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
   self.skipWaiting();
 });
 
-// Activate — clean old caches
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(
-        keys
-          .filter((key) => key !== CACHE_NAME)
-          .map((key) => caches.delete(key))
+        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
       )
     )
   );
   self.clients.claim();
 });
 
-// Fetch — serve from cache
 self.addEventListener("fetch", (event) => {
   if (
     event.request.method !== "GET" ||
-    event.request.url.includes("googleapis.com")
+    event.request.url.includes("googleapis.com") ||
+    event.request.url.includes("firebaseapp.com") ||
+    event.request.url.includes("firebase.com")
   ) {
     return;
   }
@@ -44,7 +39,7 @@ self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((cached) => {
       return cached || fetch(event.request).catch(() =>
-        caches.match("/TESTIFY/index.html")
+        caches.match("/index.html")
       );
     })
   );
