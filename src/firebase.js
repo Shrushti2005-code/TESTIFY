@@ -4,7 +4,7 @@ import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC8CcLt8gbpyc8M3xr8ZSCxNeCccm2rUOc",
-  authDomain: "testify-iota-mocha.vercel.app", // ← CHANGED: use your Vercel domain
+  authDomain: "simple-flutter-d88c7.firebaseapp.com",
   projectId: "simple-flutter-d88c7",
   storageBucket: "simple-flutter-d88c7.firebasestorage.app",
   messagingSenderId: "587339609841",
@@ -12,9 +12,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
 export const auth = getAuth(app);
 export const db   = getFirestore(app);
-
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: "select_account" });
