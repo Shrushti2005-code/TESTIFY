@@ -1,5 +1,5 @@
 {
   "rewrites": [
-    { "source": "/((?!manifest.json|sw.js|icon-192.png|icon-512.png|assets/.*).*)", "destination": "/index.html" }
+    { "source": "/((?!assets|manifest.json|sw.js|icon-192.png|icon-512.png).*)", "destination": "/index.html" }
   ]
 }
