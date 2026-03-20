@@ -4,7 +4,7 @@ import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC8CcLt8gbpyc8M3xr8ZSCxNeCccm2rUOc",
-  authDomain: "simple-flutter-d88c7.firebaseapp.com",
+  authDomain: "testify-iota-mocha.vercel.app", // ← CHANGED: use your Vercel domain
   projectId: "simple-flutter-d88c7",
   storageBucket: "simple-flutter-d88c7.firebasestorage.app",
   messagingSenderId: "587339609841",
@@ -17,5 +17,4 @@ export const auth = getAuth(app);
 export const db   = getFirestore(app);
 
 export const googleProvider = new GoogleAuthProvider();
-// Force Google to always show account picker + ask for password
 googleProvider.setCustomParameters({ prompt: "select_account" });
